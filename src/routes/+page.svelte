@@ -3,7 +3,7 @@
 		<section class="text-center py-8">
 			<p class="text-6xl font-bold">Smash or Pass</p>
 			<p class="text-lg text-neutral-400 mt-6">
-				Smash, next question? There are 10+ smash or pass questions
+				Smash, next question? Let's dive into the wild side of the internet.
 			</p>
 		</section>
 

@@ -30,7 +30,7 @@
 		<div class="py-8" />
 
 		<section class="grid grid-cols-3 gap-6">
-			<button type="button" class="bg-black/20 rounded-xl p-4 flex flex-col items-start">
+			<button type="button" class="bg-black/10 rounded-xl p-4 flex flex-col items-start">
 				<img src="/kana.png" alt="" class="object-contain w-full rounded-xl" />
 				<p class="text-2xl font-semibold mt-4">128 anime girls</p>
 				<p class="text-xs mt-1 pb-1 text-neutral-400">696,969 people smashed</p>

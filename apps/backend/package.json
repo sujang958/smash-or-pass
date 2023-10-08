@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-esm ./src/app.ts",
+    "migrate:dev": "prisma migrate dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.8.3",
+    "prisma": "^5.4.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "type": "module",
+  "dependencies": {
+    "@fastify/multipart": "^8.0.0",
+    "@prisma/client": "^5.4.1",
+    "dotenv": "^16.3.1",
+    "fastify": "^4.23.2",
+    "sharp": "^0.32.6"
+  }
+}

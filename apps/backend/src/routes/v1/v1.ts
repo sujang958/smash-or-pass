@@ -4,5 +4,11 @@ import { V1_GAMES } from "./games.js"
 export const V1: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.register(V1_GAMES)
 
+  fastify.setErrorHandler((err, req, reply) => {
+    console.log(err)
+
+    throw err
+  })
+
   done()
 }

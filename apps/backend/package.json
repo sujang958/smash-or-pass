@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-esm ./src/app.ts",
+    "dev": "node --loader ts-node/esm ./src/app.ts",
     "migrate:dev": "prisma migrate dev"
   },
   "license": "MIT",

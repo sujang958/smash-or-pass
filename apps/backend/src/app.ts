@@ -2,9 +2,9 @@ import "dotenv/config"
 
 import fastify from "fastify"
 import multipart from "@fastify/multipart"
-import { saveImage } from "./utils/fs.js"
-import sharp from "sharp"
 import { V1 } from "./routes/v1/v1.js"
+
+if (!process.env.PORT || !process.env.FILE_PATH) process.exit(1)
 
 const app = fastify({ http2: true, logger: true })
 

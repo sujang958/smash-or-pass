@@ -15,7 +15,7 @@ model Game {
   id          String   @id @default(cuid())
   name        String   @db.VarChar(128)
   description String   @db.VarChar(256)
-  images      Image[] // ["/[id]/0.webp", "/[id]/1.webp"...]
+  images      Image[]
   createdAt   DateTime @default(now())
 }
 

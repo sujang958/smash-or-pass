@@ -23,6 +23,7 @@ model Image {
   id     String @id @default(cuid())
   gameId String
   game   Game   @relation(fields: [gameId], references: [id])
+  name   String @db.VarChar(128)
   path   String // /[id]/0.webp
   smash  Int
   pass   Int

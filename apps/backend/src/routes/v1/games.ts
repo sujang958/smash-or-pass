@@ -13,9 +13,9 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
     reply.send(await prisma.game.findMany({ include: { images: true } })),
   )
 
-  fastify.get<{ Params: { id: string } }>("/games/[id]", async (req, reply) =>
+  fastify.get<{ Params: { id: string } }>("/games/:id", async (req, reply) =>
     reply.send(
-      await prisma.game.findUnique({
+      await prisma.game.findUniqueOrThrow({
         include: { images: true },
         where: { id: req.params?.id ?? "" },
       }),

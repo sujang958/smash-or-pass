@@ -51,6 +51,7 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
             smash: 0,
             path: `/imgs/${game.id}/${i}.webp`,
             game: { connect: { id: game.id } },
+            name: game.name,
           },
         })
       }),

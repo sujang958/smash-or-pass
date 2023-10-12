@@ -1,6 +1,6 @@
 <div class="flex flex-col items-center overflow-hidden">
-	<div class="h-screen max-w-5xl w-full flex flex-col items-center p-24 space-y-20">
-		<section class="text-center">
+	<div class="h-screen max-w-5xl w-full flex flex-col items-center justify-center p-24 space-y-20">
+		<section class="text-center -mt-2">
 			<p class="text-5xl font-bold">128 Anime Girls</p>
 			<p class="mt-3 text-base text-neutral-400">Your 2D anime waifus</p>
 		</section>

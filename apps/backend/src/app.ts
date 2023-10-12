@@ -9,7 +9,7 @@ if (!process.env.PORT || !process.env.FILE_PATH) process.exit(1)
 const app = fastify({ logger: true }) // In WSL, when http2 enabled, response 글자 깨짐
 
 app.register(multipart, {
-  limits: { fileSize: (4.096e9 / 4) * 256, fieldSize: 4.096e6 },
+  limits: { fileSize: (4.096e9 / 4) * 128, fieldSize: 4.096e6 },
 })
 app.register(V1, { prefix: "/v1" })
 

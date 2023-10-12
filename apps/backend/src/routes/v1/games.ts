@@ -3,8 +3,8 @@ import { prisma } from "../../utils/prisma.js"
 import sharp from "sharp"
 import { join } from "path"
 import { outputFile } from "fs-extra"
-import { BadRequestError } from "../../utils/errors.js"
 import { newGameBody } from "../../types/games.js"
+import { HttpError } from "../../utils/errors.js"
 
 export const toImgPath = (path: string) => join(process.env.FILE_PATH!, path)
 
@@ -28,23 +28,40 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
     const files = req.files()
 
     if ((await files.next()).done)
-      throw new BadRequestError("There must be more than zero files")
+      throw new HttpError(400, "There must be more than zero files")
 
     const game = await prisma.game.create({
       data: { ...body },
     })
 
     const buffers: Buffer[] = []
-
     for await (const file of files) buffers.push(await file.toBuffer())
+
+    if (buffers.length > 1024)
+      throw new HttpError(400, "The max number of images is 1024")
 
     const compressed = await Promise.all(
       buffers.map(async (buffer) => await sharp(buffer).webp().toBuffer()),
     )
 
+    const results = await Promise.allSettled(
+      compressed.map((img, i) =>
+        outputFile(toImgPath(`${game.id}/${i}.webp`), img),
+      ),
+    )
+
+    const rejectedIndexes = results
+      .map((result, i) => (result.status == "rejected" ? i : null))
+      .filter((v): v is number => v !== null) //filter((result): result is PromiseRejectedResult => result.status === "rejected")
+
+    if (rejectedIndexes)
+      throw new HttpError(
+        400,
+        `${rejectedIndexes.map((v) => v + 1).join(", ")}`,
+      )
+
     await prisma.$transaction(
       compressed.map((img, i) => {
-        outputFile(toImgPath(`${game.id}/${i}.webp`), img)
         return prisma.image.create({
           data: {
             pass: 0,

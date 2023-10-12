@@ -25,5 +25,7 @@
 		"vite": "^4.4.2"
 	},
 	"type": "module",
-	"dependencies": {}
+	"dependencies": {
+		"svelte-file-dropzone": "^2.0.2"
+	}
 }

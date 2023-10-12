@@ -7,7 +7,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "prettier": "^3.0.3",
+    "prettier": "2",
     "turbo": "latest"
   },
   "name": "asdf",

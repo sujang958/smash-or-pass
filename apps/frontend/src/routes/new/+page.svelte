@@ -86,18 +86,19 @@
           class="mt-2 rounded-lg px-4 py-1 bg-white text-black font-medium text-sm"
           >Select images</button
         >
+        <input
+          type="file"
+          name="files"
+          multiple
+          accept="image/*"
+          bind:this={fileInput}
+          bind:files
+          class="invisible"
+          required
+        />
       </label>
 
-      <input
-        type="file"
-        name="files"
-        multiple
-        accept="image/*"
-        bind:this={fileInput}
-        bind:files
-        class="invisible"
-        required
-      />
+      <!-- <p>Remember me</p> TODO: generate a safe password to modify later -->
 
       <button type="submit" class="rounded-lg px-4 py-1 bg-white text-black font-semibold mt-16"
         >Submit</button

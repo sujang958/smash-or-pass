@@ -20,7 +20,7 @@
 
 	let inputFiles: Array<Promise<string>> = [];
 
-	$: if (files.length > 0) {
+	$: if (files?.length > 0) {
 		inputFiles = [];
 		for (const file of files) inputFiles = [...inputFiles, readFile(file)];
 	}

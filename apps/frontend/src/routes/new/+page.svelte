@@ -4,70 +4,33 @@
 	let files: FileList;
 	let fileInput: HTMLInputElement;
 
-	$: console.log(files);
+	const readFile = (file: Blob): Promise<string> =>
+		new Promise((resolve, reject) => {
+			const fileReader = new FileReader();
+
+			fileReader.addEventListener('abort', () => reject('Aborted'));
+			fileReader.addEventListener('error', () => reject('Errors'));
+
+			fileReader.addEventListener('load', (event) => {
+				resolve(fileReader.result?.toString()!);
+			});
+
+			fileReader.readAsDataURL(file);
+		});
+
+	let inputFiles: Array<Promise<string>> = [];
+
+	$: if (files.length > 0) {
+		inputFiles = [];
+		for (const file of files) inputFiles = [...inputFiles, readFile(file)];
+	}
 </script>
-
-<!-- <div class="flex flex-col items-center">
-	<div class="max-w-5xl w-full p-24 relative min-h-screen">
-		<section>
-			<p class="text-4xl font-semibold">Create a</p>
-			<p class="mt-1 text-4xl font-semibold">New Smash or Pass</p>
-		</section>
-		<div class="py-24 flex flex-row justify-between gap-x-32">
-			<section class="flex flex-col gap-y-4 w-1/2">
-				<label class="flex flex-col">
-					<p>Name</p>
-					<input
-						type="text"
-						class="mt-2 rounded-lg bg-neutral-800 border border-neutral-700 px-2 py-1"
-						placeholder="Name"
-						maxlength="128"
-						required
-						name="name"
-					/>
-				</label>
-				<label class="flex flex-col">
-					<p>Description</p>
-					<textarea
-						class="mt-2 rounded-lg bg-neutral-800 border border-neutral-700 px-2 py-1 w-full"
-						placeholder="Description"
-						maxlength="256"
-						required
-						name="description"
-					/>
-				</label>
-				<label>
-					<p>Images</p>
-					<button
-						on:click={() => fileInput.showPicker()}
-						class="mt-2 rounded-lg px-4 py-1 bg-white text-black font-medium text-sm"
-						>Select images</button
-					>
-				</label>
-
-				<button type="submit" class="rounded-lg px-4 py-1 bg-white text-black font-medium mt-14"
-					>Submit</button
-				>
-			</section>
-			<section class="flex flex-col gap-y-4 w-1/2">
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-				<p class="text-5xl h-64">asdf</p>
-			</section>
-		</div>
-	</div>
-</div> -->
 
 <div class="flex flex-col items-center">
 	<div class="max-w-5xl w-full relative p-24 flex flex-row justify-between gap-x-36">
 		<!-- For debugging, use bg-black -->
 		<form class="flex flex-col gap-y-4 w-1/2 sticky top-24 h-min">
-			<button type="button"
-			class="mb-8"
+			<button type="button" class="mb-8"
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -123,13 +86,18 @@
 			>
 		</form>
 		<section class="flex flex-col gap-y-4 w-1/2 py-56">
+			{#each inputFiles as inputFile}
+				{#await inputFile then src}
+					<img {src} alt="" class="object-contain" />
+				{/await}
+			{/each}
+			<!-- <p class="text-5xl h-64">asdf</p>
 			<p class="text-5xl h-64">asdf</p>
 			<p class="text-5xl h-64">asdf</p>
 			<p class="text-5xl h-64">asdf</p>
 			<p class="text-5xl h-64">asdf</p>
 			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
+			<p class="text-5xl h-64">asdf</p> -->
 		</section>
 	</div>
 </div>

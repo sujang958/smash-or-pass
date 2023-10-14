@@ -26,6 +26,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"ky": "^1.0.1",
 		"svelte-file-dropzone": "^2.0.2"
 	}
 }

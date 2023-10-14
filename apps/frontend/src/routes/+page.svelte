@@ -1,5 +1,5 @@
 <div class="flex flex-col items-center w-full">
-	<div class="py-24 max-w-5xl w-full self-center relative">
+	<div class="p-24 max-w-5xl w-full self-center relative">
 		<section class="text-center py-8">
 			<p class="text-6xl font-bold">Smash or Pass</p>
 			<p class="text-lg text-neutral-400 mt-6">

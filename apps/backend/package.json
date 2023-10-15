@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --loader ts-node/esm ./src/app.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "migrate:dev": "prisma migrate dev"
   },
   "license": "MIT",

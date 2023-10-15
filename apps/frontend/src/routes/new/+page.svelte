@@ -26,6 +26,8 @@
   }
 
   const onSubmit = async (event: SubmitEvent) => {
+    console.log(event.target)
+
     if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
 
     const data = new FormData(event.target)

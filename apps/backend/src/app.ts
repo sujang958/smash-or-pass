@@ -11,6 +11,7 @@ const app = fastify({ logger: true }) // In WSL, when http2 enabled, response ê¸
 
 app.register(cors)
 app.register(multipart, {
+  attachFieldsToBody: "keyValues",
   limits: { fileSize: (4.096e9 / 4) * 128, fieldSize: 4.096e6 },
 })
 app.register(V1, { prefix: "/v1" })

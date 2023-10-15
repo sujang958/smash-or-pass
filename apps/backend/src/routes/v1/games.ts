@@ -5,6 +5,7 @@ import { join } from "path"
 import { outputFile } from "fs-extra"
 import { newGameBody } from "../../types/games.js"
 import { HttpError } from "../../utils/errors.js"
+import fastifyMultipart from "@fastify/multipart"
 
 export const toImgPath = (path: string) => join(process.env.FILE_PATH!, path)
 
@@ -23,6 +24,12 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
   )
 
   fastify.post("/games/new", async (req, reply) => {
+    console.log(req.body, "Bodyody ah")
+
+    reply.send('{"K": "kk"}')
+
+    return
+
     const body = newGameBody.parse(req.body)
 
     const files = req.files()

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import ky from "ky"
+
   let files: FileList
   let fileInput: HTMLInputElement
 
@@ -24,11 +26,16 @@
   }
 
   const onSubmit = async (event: SubmitEvent) => {
+    event.preventDefault()
+
     if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
 
     const data = new FormData(event.target)
 
-    console.log(data.getAll("files"))
+    // TODO: change to env
+    const json = await ky.post("http://localhost:3000/v1/games/new", { body: data }).json()
+
+    console.log(json)
   }
 </script>
 
@@ -78,7 +85,7 @@
           name="description"
         />
       </label>
-      <label>
+      <label class="relative">
         <p>Images</p>
         <button
           type="button"
@@ -93,9 +100,10 @@
           accept="image/*"
           bind:this={fileInput}
           bind:files
-          class="invisible"
+          class="opacity-0 top-8 left-0 absolute -z-10"
           required
         />
+        <!-- invisible -->
       </label>
 
       <!-- <p>Remember me</p> TODO: generate a safe password to modify later -->
@@ -111,6 +119,7 @@
             <img {src} alt="" class="object-contain rounded-lg" />
             <input type="text" />
           </div>
+          <!-- TODO: add a button to remove with -->
         {/await}
       {/each}
       <!-- <p class="text-5xl h-64">asdf</p>

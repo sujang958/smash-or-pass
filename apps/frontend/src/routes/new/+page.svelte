@@ -26,8 +26,6 @@
   }
 
   const onSubmit = async (event: SubmitEvent) => {
-    event.preventDefault()
-
     if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
 
     const data = new FormData(event.target)
@@ -42,7 +40,10 @@
 <div class="flex flex-col items-center">
   <div class="max-w-5xl w-full relative p-24 flex flex-row justify-between gap-x-36">
     <!-- For debugging, use bg-black -->
-    <form class="flex flex-col gap-y-4 w-1/2 sticky top-24 h-min" on:submit={onSubmit}>
+    <form
+      class="flex flex-col gap-y-4 w-1/2 sticky top-24 h-min"
+      on:submit|self|preventDefault={onSubmit}
+    >
       <button type="button" class="mb-8"
         ><svg
           xmlns="http://www.w3.org/2000/svg"

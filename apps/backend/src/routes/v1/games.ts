@@ -23,60 +23,63 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
     ),
   )
 
-  fastify.post("/games/new", async (req, reply) => {
-    const body = newGameBody.parse(req.body)
+  fastify.post<{ Body: Record<string, any> }>(
+    "/games/new",
+    async (req, reply) => {
+      const body = newGameBody.parse(req.body)
 
-    const files = req.files()
+      const files: Buffer[] = Array.isArray(req.body.files)
+        ? req.body.files
+        : [req.body.files]
 
-    if ((await files.next()).done)
-      throw new HttpError(400, "There must be more than zero files")
+      const game = await prisma.game.create({
+        data: { ...body },
+      })
 
-    const game = await prisma.game.create({
-      data: { ...body },
-    })
+      if (files.length > 1024)
+        throw new HttpError(400, "The max number of images is 1024")
 
-    const buffers: Buffer[] = []
-    for await (const file of files) buffers.push(await file.toBuffer())
-
-    if (buffers.length > 1024)
-      throw new HttpError(400, "The max number of images is 1024")
-
-    const compressed = await Promise.all(
-      buffers.map(async (buffer) => await sharp(buffer).webp().toBuffer()),
-    )
-
-    const results = await Promise.allSettled(
-      compressed.map((img, i) =>
-        outputFile(toImgPath(`${game.id}/${i}.webp`), img),
-      ),
-    )
-
-    const rejectedIndexes = results
-      .map((result, i) => (result.status == "rejected" ? i : null))
-      .filter((v): v is number => v !== null) //filter((result): result is PromiseRejectedResult => result.status === "rejected")
-
-    if (rejectedIndexes)
-      throw new HttpError(
-        400,
-        `${rejectedIndexes.map((v) => v + 1).join(", ")}`,
+      const compressed = await Promise.all(
+        files.map(async (buffer) => await sharp(buffer).webp().toBuffer()),
       )
 
-    await prisma.$transaction(
-      compressed.map((img, i) => {
-        return prisma.image.create({
-          data: {
-            pass: 0,
-            smash: 0,
-            path: `/imgs/${game.id}/${i}.webp`,
-            game: { connect: { id: game.id } },
-            name: game.name,
-          },
-        })
-      }),
-    )
+      const results = await Promise.allSettled(
+        compressed.map((img, i) =>
+          outputFile(toImgPath(`${game.id}/${i}.webp`), img),
+        ),
+      )
 
-    return await prisma.game.findUnique({ where: { id: game.id } })
-  })
+      const rejectedIndexes = results
+        .map((result, i) => (result.status == "rejected" ? i : null))
+        .filter((v): v is number => v !== null)
+
+      if (rejectedIndexes)
+        throw new HttpError(
+          400,
+          `Images at ${rejectedIndexes
+            .map((v) => v + 1)
+            .join(", ")} got failed`,
+        )
+
+      await prisma.$transaction(
+        compressed.map((_, i) => {
+          return prisma.image.create({
+            data: {
+              pass: 0,
+              smash: 0,
+              path: `/imgs/${game.id}/${i}.webp`,
+              game: { connect: { id: game.id } },
+              name: game.name,
+            },
+          })
+        }),
+      )
+
+      return reply.send(
+        await prisma.game.findUnique({ where: { id: game.id } }),
+      )
+    },
+  )
 
   done()
 }

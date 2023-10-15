@@ -20,14 +20,9 @@
 
   let inputFiles: Array<Promise<string>> = []
 
-  $: if (files?.length > 0) {
-    inputFiles = []
-    for (const file of files) inputFiles = [...inputFiles, readFile(file)]
-  }
+  $: if (files?.length > 0) for (const file of files) inputFiles = [...inputFiles, readFile(file)]
 
   const onSubmit = async (event: SubmitEvent) => {
-    console.log(event.target)
-
     if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
 
     const data = new FormData(event.target)
@@ -37,6 +32,8 @@
 
     console.log(json)
   }
+
+  const fileNames = Array(1024)
 </script>
 
 <div class="flex flex-col items-center">
@@ -90,12 +87,24 @@
       </label>
       <label class="relative">
         <p>Images</p>
-        <button
-          type="button"
-          on:click={() => fileInput.showPicker()}
-          class="mt-2 rounded-lg px-4 py-1 bg-white text-black font-medium text-sm"
-          >Select images</button
-        >
+        <div class="flex flex-row items-center mt-2 gap-x-2">
+          <button
+            type="button"
+            on:click|preventDefault={() => fileInput.showPicker()}
+            class="rounded-lg px-4 py-1 bg-white text-black font-medium text-sm"
+            >Select images</button
+          >
+          {#if inputFiles.length > 0}
+            <button
+              type="button"
+              class="rounded-lg bg-red-700 px-4 py-1 text-sm font-medium"
+              on:click|preventDefault|trusted={() => {
+                fileInput.value = ""
+                inputFiles = []
+              }}>Clear all</button
+            >
+          {/if}
+        </div>
         <input
           type="file"
           name="files"
@@ -116,22 +125,19 @@
       >
     </form>
     <section class="flex flex-col gap-y-8 w-1/2 py-56">
-      {#each inputFiles as inputFile}
+      {#each inputFiles as inputFile, i}
         {#await inputFile then src}
-          <div>
-            <img {src} alt="" class="object-contain rounded-lg" />
-            <input type="text" />
+          <div class="a{i}">
+            <img {src} alt="" class="object-contain rounded-lg w-full" />
+            <input
+              type="text"
+              bind:value={fileNames[i]}
+              class="rounded-lg bg-neutral-800 border border-neutral-600 text-white px-1.5 py-0.5"
+            />
           </div>
           <!-- TODO: add a button to remove with -->
         {/await}
       {/each}
-      <!-- <p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p>
-			<p class="text-5xl h-64">asdf</p> -->
     </section>
   </div>
 </div>

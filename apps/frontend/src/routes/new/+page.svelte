@@ -119,9 +119,24 @@
       </label>
 
       <!-- <p>Remember me</p> TODO: generate a safe password to modify later -->
-
-      <button type="submit" class="rounded-lg px-4 py-1 bg-white text-black font-semibold mt-16"
-        >Submit</button
+      <div class="border-b border-neutral-700 mt-12" />
+      <!-- <label class="text-base flex flex-row items-start gap-x-2 align-middle">
+        <input
+          type="checkbox"
+          name="rememberMe"
+          class="w-4 h-4 text-blue-600 rounded bg-neutral-700 border-gray-600 appearance-none mt-1"
+        />
+        <div>
+          <p>Remeber me</p>
+          <p class="text-xs text-neutral-400 mt-0.5">
+            By checking this, a password will be generated for you. You can modify this
+            smash-or-pass with the password after creating it.
+          </p>
+        </div>
+      </label> -->
+      <button
+        type="submit"
+        class="rounded-lg text-base px-4 py-1 bg-white text-black font-medium mt-2">Submit</button
       >
     </form>
     <section class="flex flex-col gap-y-8 w-1/2 py-56">

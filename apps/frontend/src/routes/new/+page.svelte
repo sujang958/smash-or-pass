@@ -8,6 +8,8 @@
     new Promise((resolve, reject) => {
       const fileReader = new FileReader()
 
+      if (!file.type.startsWith("image/")) return reject("Not an image file")
+
       fileReader.addEventListener("abort", () => reject("Aborted"))
       fileReader.addEventListener("error", () => reject("Errors"))
 
@@ -18,14 +20,22 @@
       fileReader.readAsDataURL(file)
     })
 
-  let inputFiles: Array<Promise<string>> = []
+  let inputImages: Array<Promise<string>> = []
 
-  $: if (files?.length > 0) for (const file of files) inputFiles = [...inputFiles, readFile(file)]
+  $: try {
+    if (files?.length > 0) for (const file of files) inputImages = [...inputImages, readFile(file)]
+  } catch (e) {
+    // TODO: show toast
+  }
 
   const onSubmit = async (event: SubmitEvent) => {
     if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
 
     const data = new FormData(event.target)
+
+    for (const fileName of fileNames) data.append("imageNames", fileName)
+
+    new Blob(fileNames)
 
     // TODO: change to env
     const json = await ky.post("http://localhost:3000/v1/games/new", { body: data }).json()
@@ -33,7 +43,7 @@
     console.log(json)
   }
 
-  const fileNames = Array(1024)
+  const fileNames: string[] = []
 </script>
 
 <div class="flex flex-col items-center">
@@ -94,13 +104,13 @@
             class="rounded-lg px-4 py-1 bg-white text-black font-medium text-sm"
             >Select images</button
           >
-          {#if inputFiles.length > 0}
+          {#if inputImages.length > 0}
             <button
               type="button"
               class="rounded-lg bg-red-700 px-4 py-1 text-sm font-medium"
               on:click|preventDefault|trusted={() => {
                 fileInput.value = ""
-                inputFiles = []
+                inputImages = []
               }}>Clear all</button
             >
           {/if}
@@ -118,7 +128,7 @@
         <!-- invisible -->
       </label>
 
-      <!-- <p>Remember me</p> TODO: generate a safe password to modify later -->
+      <!-- <p>Remember me</p> let server generate TODO: generate a safe password to modify later -->
       <div class="border-b border-neutral-700 mt-12" />
       <!-- <label class="text-base flex flex-row items-start gap-x-2 align-middle">
         <input
@@ -140,7 +150,7 @@
       >
     </form>
     <section class="flex flex-col gap-y-8 w-1/2 py-56">
-      {#each inputFiles as inputFile, i}
+      {#each inputImages as inputFile, i}
         {#await inputFile then src}
           <div class="a{i}">
             <img {src} alt="" class="object-contain rounded-lg w-full" />

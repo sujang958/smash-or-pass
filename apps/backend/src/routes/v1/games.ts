@@ -26,6 +26,8 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.post<{ Body: Record<string, any> }>(
     "/games/new",
     async (req, reply) => {
+      console.log(req.body)
+
       const body = newGameBody.parse(req.body)
 
       const files: Buffer[] = Array.isArray(req.body.files)
@@ -53,7 +55,7 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
         .map((result, i) => (result.status == "rejected" ? i : null))
         .filter((v): v is number => v !== null)
 
-      if (rejectedIndexes)
+      if (rejectedIndexes.length >= 1)
         throw new HttpError(
           400,
           `Images at ${rejectedIndexes

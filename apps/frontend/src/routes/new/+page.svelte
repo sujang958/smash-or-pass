@@ -34,9 +34,11 @@
 
     const data = new FormData(event.target)
 
-    for (const fileName of fileNames) data.append("imageNames", fileName)
+    if (fileNames.length !== files.length) return toast.error("A name is required for an image")
+    if (fileNames.filter((v) => !v).length > 0)
+      return toast.error("A name is required for an image")
 
-    new Blob(fileNames)
+    for (const fileName of fileNames) data.append("imageNames", fileName)
 
     // TODO: change to env
     const json = await ky.post("http://localhost:3000/v1/games/new", { body: data }).json()
@@ -130,7 +132,7 @@
       </label>
 
       <!-- <p>Remember me</p> let server generate TODO: generate a safe password to modify later -->
-      <div class="border-b border-neutral-700 mt-12" />
+      <div class="border-b border-neutral-800 mt-8 mb-4" />
       <!-- <label class="text-base flex flex-row items-start gap-x-2 align-middle">
         <input
           type="checkbox"
@@ -155,11 +157,15 @@
         {#await inputFile then src}
           <div class="a{i}">
             <img {src} alt="" class="object-contain rounded-lg w-full" />
-            <input
-              type="text"
-              bind:value={fileNames[i]}
-              class="rounded-lg bg-neutral-800 border border-neutral-600 text-white px-1.5 py-0.5"
-            />
+            <div class="flex flex-row items-center justify-between mt-3">
+              <p class="text-base font-medium">Name</p>
+              <input
+                type="text"
+                bind:value={fileNames[i]}
+                class="rounded-lg bg-neutral-800 border border-neutral-700 text-white px-2 py-0.5 text-sm"
+                placeholder="Type here"
+              />
+            </div>
           </div>
           <!-- TODO: add a button to remove with -->
         {/await}

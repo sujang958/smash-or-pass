@@ -155,7 +155,26 @@
     <section class="flex flex-col gap-y-8 w-1/2 py-56">
       {#each inputImages as inputFile, i}
         {#await inputFile then src}
-          <div class="a{i}">
+          <div class="a{i} relative">
+            <button
+              type="button"
+              class="absolute top-2 right-2 rounded-full p-0.5 backdrop-blur-md bg-black/50 transition duration-200 hover:scale-105"
+              on:click={() => {
+                fileInput.value = ""
+                delete inputImages[i]
+                inputImages = inputImages.filter((v) => v)
+              }}
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-4 h-4"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
             <img {src} alt="" class="object-contain rounded-lg w-full" />
             <div class="flex flex-row items-center justify-between mt-3">
               <p class="text-base font-medium">Name</p>

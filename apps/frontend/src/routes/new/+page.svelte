@@ -1,5 +1,6 @@
 <script lang="ts">
   import ky from "ky"
+  import toast from "svelte-french-toast"
 
   let files: FileList
   let fileInput: HTMLInputElement
@@ -25,11 +26,11 @@
   $: try {
     if (files?.length > 0) for (const file of files) inputImages = [...inputImages, readFile(file)]
   } catch (e) {
-    // TODO: show toast
+    toast.error("Failed loading images")
   }
 
   const onSubmit = async (event: SubmitEvent) => {
-    if (!(event.target instanceof HTMLFormElement)) return // show toast some shit
+    if (!(event.target instanceof HTMLFormElement)) return
 
     const data = new FormData(event.target)
 

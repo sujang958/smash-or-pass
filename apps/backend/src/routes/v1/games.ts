@@ -10,8 +10,16 @@ import fastifyMultipart from "@fastify/multipart"
 export const toImgPath = (path: string) => join(process.env.FILE_PATH!, path)
 
 export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.get("/games", async (req, reply) =>
-    reply.send(await prisma.game.findMany({ include: { images: true } })),
+  fastify.get<{ Querystring: { limit: number } }>(
+    "/games",
+    async (req, reply) =>
+      reply.send(
+        await prisma.game.findMany({
+          include: { images: true },
+          orderBy: { createdAt: "asc" },
+          take: Number(req.query?.limit) ?? 50,
+        }),
+      ),
   )
 
   fastify.get<{ Params: { id: string } }>("/games/:id", async (req, reply) =>

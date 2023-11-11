@@ -8,12 +8,14 @@
   },
   "devDependencies": {
     "prettier": "2",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "^5.2.2"
   },
   "name": "asdf",
   "packageManager": "yarn@1.22.19",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {}
 }

@@ -9,9 +9,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/fs-extra": "^11.0.2",
     "@types/node": "^20.8.3",
-    "prisma": "^5.4.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
@@ -20,11 +18,8 @@
     "@fastify/cors": "^8.4.0",
     "@fastify/multipart": "^8.0.0",
     "@fastify/rate-limit": "^8.0.3",
-    "@prisma/client": "^5.4.1",
     "dotenv": "^16.3.1",
     "fastify": "^4.23.2",
-    "fs-extra": "^11.1.1",
-    "sharp": "^0.32.6",
-    "zod": "^3.22.4"
+    "v1": "^1.0.0"
   }
 }

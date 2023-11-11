@@ -1,9 +1,9 @@
 import { FastifyPluginCallback } from "fastify"
-import { V1_GAMES } from "./games.js"
+import { V1_GAMES } from "./routes/games.js"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library.js"
-import { HttpError } from "../../utils/errors.js"
+import { HttpError } from "./utils/errors.js"
 
-export const V1: FastifyPluginCallback = (fastify, opts, done) => {
+const V1: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.register(V1_GAMES)
 
   fastify.setErrorHandler((err, req, reply) => {
@@ -26,3 +26,5 @@ export const V1: FastifyPluginCallback = (fastify, opts, done) => {
 
   done()
 }
+
+export default V1

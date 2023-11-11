@@ -12,6 +12,7 @@ CREATE TABLE "Game" (
 CREATE TABLE "Image" (
     "id" TEXT NOT NULL,
     "gameId" TEXT NOT NULL,
+    "name" VARCHAR(128) NOT NULL,
     "path" TEXT NOT NULL,
     "smash" INTEGER NOT NULL,
     "pass" INTEGER NOT NULL,

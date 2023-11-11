@@ -3,7 +3,8 @@ import "dotenv/config"
 import fastify from "fastify"
 import cors from "@fastify/cors"
 import multipart from "@fastify/multipart"
-import { V1 } from "./routes/v1/v1.js"
+
+import V1 from "v1/v1.js"
 
 if (!process.env.PORT || !process.env.FILE_PATH) process.exit(1)
 

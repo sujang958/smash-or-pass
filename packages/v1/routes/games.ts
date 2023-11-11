@@ -1,11 +1,10 @@
 import { FastifyPluginCallback } from "fastify"
-import { prisma } from "../../utils/prisma.js"
+import { prisma } from "../utils/prisma.js"
 import sharp from "sharp"
 import { join } from "path"
 import { outputFile } from "fs-extra"
-import { newGameBody } from "../../types/games.js"
-import { HttpError } from "../../utils/errors.js"
-import fastifyMultipart from "@fastify/multipart"
+import { newGameBody } from "../types/games.js"
+import { HttpError } from "../utils/errors.js"
 
 export const toImgPath = (path: string) => join(process.env.FILE_PATH!, path)
 

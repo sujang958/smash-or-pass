@@ -53,7 +53,7 @@
       class="flex flex-col gap-y-4 w-1/2 sticky top-24 h-min"
       on:submit|self|preventDefault={onSubmit}
     >
-      <button type="button" class="mb-8"
+      <button on:click={() => history.back()} type="button" class="mb-8"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

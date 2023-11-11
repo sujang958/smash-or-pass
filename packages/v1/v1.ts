@@ -9,19 +9,25 @@ const V1: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.setErrorHandler((err, req, reply) => {
     console.log(err)
 
-    if (err instanceof PrismaClientKnownRequestError) {
-      if (err.code == "P2025")
-        return reply.status(404).send({ ok: false, message: "Not Found" })
-    } else if (err instanceof HttpError) {
+    if (err instanceof PrismaClientKnownRequestError)
+      switch (err.code) {
+        case "P2025":
+          return reply.status(404).send({ ok: false, message: "Not Found" })
+        default:
+          break
+      }
+
+    if (err instanceof HttpError)
       return reply
         .status(err.httpCode)
         .send({ ok: false, message: err.message })
-    }
-
-    return reply.status(500).send({
-      ok: false,
-      message: "I can't tell what it is. But there is just an error",
-    })
+    else if (err.statusCode === 429)
+      return reply.code(429).send({ ok: false, message: err.message })
+    else
+      return reply.status(500).send({
+        ok: false,
+        message: "I can't tell what it is. But there is just an error",
+      })
   })
 
   done()

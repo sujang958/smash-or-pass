@@ -32,7 +32,7 @@ export const V1_GAMES: FastifyPluginCallback = (fastify, opts, done) => {
 
   fastify.post<{ Body: Record<string, any> }>(
     "/games/new",
-    { config: { rateLimit: { max: 2, timeWindow: "1 minute" } } },
+    { config: { rateLimit: { max: 3, timeWindow: "1 day" } } },
     async (req, reply) => {
       console.log(req.body)
 
